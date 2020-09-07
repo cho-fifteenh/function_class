@@ -1,12 +1,28 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
+  var [funcShow, setFuncShow] = useState(true);
+  var [classShow, setClassShow] = useState(true);
   return (
     <div classNmae="App">
       !!
-      <FuncComp initNumber={2} />
-      <ClassComp initNumber={2} />
+      <input
+        type="button"
+        value="remove func"
+        onClick={function () {
+          setFuncShow(false);
+        }}
+      />
+      <input
+        type="button"
+        value="remove func"
+        onClick={function () {
+          setClassShow(false);
+        }}
+      />
+      {funcShow ? <FuncComp initNumber={2} /> : null}
+      {classShow ? <ClassComp initNumber={2} /> : null}
     </div>
   );
 }
@@ -23,6 +39,30 @@ function FuncComp(props) {
 
   //축약형
   var [_date, setDate] = useState(new Date().toString());
+
+  //side effect
+  useEffect(
+    function () {
+      console.log("func => useEffect()");
+      document.title = number;
+      return function () {
+        console.log("func => useEffect return");
+      };
+    },
+    [number]
+  ); //number의 원소 상태가 바뀌었을 때만 첫번째 callback 함수가 호출됨.
+
+  //componetDidMount에서만 실행되게
+  useEffect(
+    function () {
+      console.log("func => useEffect()");
+      document.title = number;
+      return function () {
+        console.log("func => useEffect return");
+      };
+    },
+    [] // 빈배열을 넣으면 1회는 실행되나 그 다음엔 실행되지 않음.
+  );
 
   return (
     <div className="container">
